@@ -17,7 +17,7 @@ export default function PropertyCard({ property }: { property: Property }) {
         <img 
           alt={property.title} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-          src={property.image_url}
+          src={property.images?.[0] || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
         />
         <button className="absolute top-3 right-3 p-2 bg-white/90 rounded-full hover:bg-mosque hover:text-white transition-colors text-nordic-dark">
           <span className="material-icons text-lg">favorite_border</span>

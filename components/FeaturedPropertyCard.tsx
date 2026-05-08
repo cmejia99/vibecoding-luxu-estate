@@ -17,7 +17,7 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
         <img 
           alt={property.title} 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-          src={property.image_url}
+          src={property.images?.[0] || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
         />
         {property.is_exclusive && (
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">

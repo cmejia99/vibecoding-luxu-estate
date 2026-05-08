@@ -19,8 +19,8 @@ export default async function PropertyDetails({ params }: { params: Promise<{ sl
     }).format(price);
   };
 
-  // Ensure we have at least 1 image, falling back to image_url if images array is empty or undefined
-  const images = property.images && property.images.length > 0 ? property.images : [property.image_url];
+  // Ensure we have at least 1 image, falling back to a placeholder if images array is empty or undefined
+  const images = property.images && property.images.length > 0 ? property.images : ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'];
   const mainImage = images[0];
   const galleryImages = images.slice(1, 5); // Take up to 4 more images
 
