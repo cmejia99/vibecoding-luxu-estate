@@ -1,4 +1,4 @@
-import { Property } from '../data/mockProperties';
+import { Property } from '../lib/properties';
 
 export default function PropertyCard({ property }: { property: Property }) {
   const formatPrice = (price: number) => {
@@ -15,7 +15,7 @@ export default function PropertyCard({ property }: { property: Property }) {
         <img 
           alt={property.title} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-          src={property.imageUrl}
+          src={property.image_url}
         />
         <button className="absolute top-3 right-3 p-2 bg-white/90 rounded-full hover:bg-mosque hover:text-white transition-colors text-nordic-dark">
           <span className="material-icons text-lg">favorite_border</span>
@@ -27,8 +27,8 @@ export default function PropertyCard({ property }: { property: Property }) {
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-baseline mb-2">
           <h3 className="font-bold text-lg text-nordic-dark">
-            {property.status === 'FOR RENT' && property.pricePerMonth ? (
-              <>{formatPrice(property.pricePerMonth)}<span className="text-sm font-normal text-nordic-muted">/mo</span></>
+            {property.status === 'FOR RENT' && property.price_per_month ? (
+              <>{formatPrice(property.price_per_month)}<span className="text-sm font-normal text-nordic-muted">/mo</span></>
             ) : (
               formatPrice(property.price)
             )}

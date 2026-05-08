@@ -1,4 +1,4 @@
-import { Property } from '../data/mockProperties';
+import { Property } from '../lib/properties';
 
 export default function FeaturedPropertyCard({ property }: { property: Property }) {
   const formatPrice = (price: number) => {
@@ -15,14 +15,14 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
         <img 
           alt={property.title} 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-          src={property.imageUrl}
+          src={property.image_url}
         />
-        {property.isExclusive && (
+        {property.is_exclusive && (
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">
             Exclusive
           </div>
         )}
-        {property.isNew && (
+        {property.is_new && (
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">
             New Arrival
           </div>
@@ -59,3 +59,4 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
     </div>
   );
 }
+
