@@ -12,6 +12,7 @@ export interface Property {
   type: 'House' | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio';
   isExclusive?: boolean;
   isNew?: boolean;
+  isFeatured?: boolean;
 }
 
 export const featuredProperties: Property[] = [

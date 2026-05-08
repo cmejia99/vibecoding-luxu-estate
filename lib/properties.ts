@@ -14,6 +14,7 @@ export interface Property {
   type: 'House' | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio';
   is_exclusive: boolean;
   is_new: boolean;
+  is_featured: boolean;
   section: 'featured' | 'market';
 }
 
@@ -23,7 +24,7 @@ export async function getFeaturedProperties(): Promise<Property[]> {
   const { data, error } = await supabase
     .from('properties')
     .select('*')
-    .eq('section', 'featured')
+    .eq('is_featured', true)
     .order('created_at', { ascending: true });
 
   if (error) {
@@ -44,7 +45,7 @@ export async function getMarketProperties(
   const { data, error, count } = await supabase
     .from('properties')
     .select('*', { count: 'exact' })
-    .eq('section', 'market')
+    .eq('is_featured', false)
     .order('created_at', { ascending: true })
     .range(from, to);
 
