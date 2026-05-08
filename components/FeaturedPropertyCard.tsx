@@ -1,4 +1,5 @@
 import { Property } from '../lib/properties';
+import Link from 'next/link';
 
 export default function FeaturedPropertyCard({ property }: { property: Property }) {
   const formatPrice = (price: number) => {
@@ -10,7 +11,8 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
   };
 
   return (
-    <div className="group relative rounded-xl overflow-hidden shadow-soft bg-white cursor-pointer">
+    <Link href={`/properties/${property.slug}`} className="block">
+      <div className="group relative rounded-xl overflow-hidden shadow-soft bg-white cursor-pointer">
       <div className="aspect-[4/3] w-full overflow-hidden relative">
         <img 
           alt={property.title} 
@@ -57,6 +59,7 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
         </div>
       </div>
     </div>
+    </Link>
   );
 }
 

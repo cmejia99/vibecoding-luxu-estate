@@ -10,6 +10,8 @@ export interface Property {
   baths: number;
   area: number;
   image_url: string;
+  images: string[];
+  slug: string;
   status: 'FOR SALE' | 'FOR RENT';
   type: 'House' | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio';
   is_exclusive: boolean;
@@ -58,4 +60,19 @@ export async function getMarketProperties(
     properties: data as Property[],
     total: count ?? 0,
   };
+}
+
+export async function getPropertyBySlug(slug: string): Promise<Property | null> {
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error) {
+    console.error(`Error fetching property with slug ${slug}:`, error);
+    return null;
+  }
+
+  return data as Property;
 }
