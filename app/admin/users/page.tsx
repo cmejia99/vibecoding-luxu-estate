@@ -61,16 +61,16 @@ export default async function AdminUsersPage() {
       <div className="bg-white dark:bg-[#152e2a] rounded-xl shadow-sm border border-gray-200 dark:border-[#006655]/20 overflow-hidden">
         {/* Table Header */}
         <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50/50 dark:bg-[#006655]/5 border-b border-gray-100 dark:border-[#006655]/10 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-[0.05em]">
-          <div className="col-span-5">{t.admin.user_details}</div>
-          <div className="col-span-3">{t.admin.role_status}</div>
+          <div className="col-span-4">{t.admin.user_details}</div>
+          <div className="col-span-2">{t.admin.role_status}</div>
           <div className="col-span-3">{t.admin.performance}</div>
-          <div className="col-span-1 text-right">{t.admin.actions}</div>
+          <div className="col-span-3 text-right">{t.admin.actions}</div>
         </div>
 
         {profiles?.map((profile) => (
           <div key={profile.id} className="grid grid-cols-1 lg:grid-cols-12 gap-4 px-6 py-6 border-b border-gray-100 dark:border-[#006655]/10 hover:bg-[#EEF6F6] dark:hover:bg-[#006655]/5 transition-colors items-center">
             {/* User Details */}
-            <div className="col-span-12 lg:col-span-5 flex items-center gap-4">
+            <div className="col-span-12 lg:col-span-4 flex items-center gap-4">
               <div className="h-12 w-12 rounded-full overflow-hidden bg-gray-100 ring-2 ring-white dark:ring-gray-800 shadow-sm flex-shrink-0">
                 {profile.avatar_url ? (
                   <Image 
@@ -93,9 +93,9 @@ export default async function AdminUsersPage() {
             </div>
 
             {/* Role & Status */}
-            <div className="col-span-12 sm:col-span-6 lg:col-span-3 flex flex-wrap items-center gap-3">
+            <div className="col-span-12 sm:col-span-6 lg:col-span-2 flex flex-wrap items-center gap-3">
               <div className="flex flex-col gap-1.5">
-                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase border ${
+                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase border ${
                   profile.role === 'admin' 
                     ? 'bg-[#19322F] text-white border-transparent' 
                     : 'bg-[#D9ECC8] text-[#006655] border-[#006655]/10'
@@ -104,7 +104,7 @@ export default async function AdminUsersPage() {
                 </span>
                 <div className="flex items-center gap-1.5 px-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                  <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.admin.active}</span>
+                  <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.admin.active}</span>
                 </div>
               </div>
             </div>
@@ -113,24 +113,24 @@ export default async function AdminUsersPage() {
             <div className="col-span-12 sm:col-span-6 lg:col-span-3">
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{t.admin.properties}</span>
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t.admin.properties}</span>
                   <span className="text-sm font-bold text-[#19322F] dark:text-white mt-0.5">12</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{t.admin.sales_ytd}</span>
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t.admin.sales_ytd}</span>
                   <span className="text-sm font-bold text-[#19322F] dark:text-white mt-0.5">$4.2M</span>
                 </div>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="col-span-12 lg:col-span-1 flex items-center justify-end gap-2">
+            <div className="col-span-12 lg:col-span-3 flex items-center justify-end gap-3">
               <RoleSelector 
                 userId={profile.id} 
                 currentRole={profile.role || 'user'} 
                 t={{ change_role: t.admin.change_role, administrator: t.admin.administrator, agent: t.admin.agent }}
               />
-              <button className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
+              <button className="p-2 rounded-lg text-gray-400 hover:text-[#006655] hover:bg-[#006655]/5 transition-all">
                 <span className="material-icons text-xl">more_vert</span>
               </button>
             </div>

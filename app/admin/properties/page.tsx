@@ -41,6 +41,15 @@ export default async function AdminPropertiesPage({
   const activeCount = allStats?.filter(p => p.status === 'FOR SALE' || p.status === 'FOR RENT').length || 0;
   const soldCount = allStats?.filter(p => p.status === 'SOLD').length || 0;
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'FOR SALE': return t.admin.status_for_sale;
+      case 'FOR RENT': return t.admin.status_for_rent;
+      case 'SOLD': return t.admin.status_sold;
+      default: return status;
+    }
+  };
+
   return (
     <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 font-display">
       {/* Header Section */}
@@ -145,7 +154,7 @@ export default async function AdminPropertiesPage({
                 <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
                   property.status === 'FOR SALE' || property.status === 'FOR RENT' ? 'bg-[#006655]' : 'bg-orange-500'
                 }`}></span>
-                {property.status}
+                {getStatusLabel(property.status)}
               </span>
             </div>
             {/* Actions */}
@@ -170,7 +179,7 @@ export default async function AdminPropertiesPage({
                 currentPage <= 1 ? 'pointer-events-none opacity-50' : ''
               }`}
             >
-              Previous
+              {t.admin.previous}
             </Link>
             <div className="flex items-center gap-1">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -193,7 +202,7 @@ export default async function AdminPropertiesPage({
                 currentPage >= totalPages ? 'pointer-events-none opacity-50' : ''
               }`}
             >
-              Next
+              {t.admin.next}
             </Link>
           </div>
         </div>
