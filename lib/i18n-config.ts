@@ -6,7 +6,7 @@ export const i18n = {
 export type Locale = (typeof i18n)['locales'][number];
 
 export const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'en', name: 'English', flag: 'https://flagcdn.com/w40/us.png' },
+  { code: 'es', name: 'Español', flag: 'https://flagcdn.com/w40/es.png' },
+  { code: 'fr', name: 'Français', flag: 'https://flagcdn.com/w40/fr.png' },
 ];

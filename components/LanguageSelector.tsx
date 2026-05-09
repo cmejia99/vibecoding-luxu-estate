@@ -25,17 +25,19 @@ export default function LanguageSelector() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-nordic-dark/5 transition-colors border border-nordic-dark/10"
+        className="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-nordic-dark/5 transition-all border border-nordic-dark/10 bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-md"
       >
-        <span className="text-lg">{currentLanguage.flag}</span>
-        <span className="text-sm font-medium text-nordic-dark uppercase">{currentLanguage.code}</span>
-        <span className={`material-icons text-sm transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+        <div className="w-5 h-3.5 overflow-hidden rounded-sm shadow-sm border border-black/5">
+          <img src={currentLanguage.flag} alt={currentLanguage.name} className="w-full h-full object-cover" />
+        </div>
+        <span className="text-sm font-semibold text-nordic-dark">{currentLanguage.name}</span>
+        <span className={`material-icons text-lg text-nordic-dark/40 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
           expand_more
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-nordic-dark/5 py-2 z-[60] animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-nordic-dark/5 py-3 z-[60] animate-in fade-in slide-in-from-top-2 duration-200">
           {languages.map((lang) => (
             <button
               key={lang.code}
@@ -43,14 +45,16 @@ export default function LanguageSelector() {
                 setLocale(lang.code as Locale);
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors hover:bg-nordic-dark/5 ${
-                locale === lang.code ? 'text-mosque font-semibold' : 'text-nordic-dark/70'
+              className={`w-full flex items-center gap-4 px-6 py-3 text-[15px] transition-colors hover:bg-nordic-dark/5 ${
+                locale === lang.code ? 'text-mosque font-bold bg-mosque/5' : 'text-nordic-dark/70 font-medium'
               }`}
             >
-              <span className="text-lg">{lang.flag}</span>
+              <div className="w-5 h-3.5 overflow-hidden rounded-sm shadow-sm border border-black/5">
+                <img src={lang.flag} alt={lang.name} className="w-full h-full object-cover" />
+              </div>
               <span>{lang.name}</span>
               {locale === lang.code && (
-                <span className="material-icons text-xs ml-auto text-mosque">check</span>
+                <span className="material-icons text-sm ml-auto text-mosque">check_circle</span>
               )}
             </button>
           ))}
