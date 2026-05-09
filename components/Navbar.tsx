@@ -6,7 +6,6 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
-import { signOut } from '@/app/auth/actions';
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -53,14 +52,14 @@ export default function Navbar() {
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-background-light"></span>
             </button>
             
-            <div className="relative border-l border-nordic-dark/10 ml-2 pl-2">
+            <div className="flex items-center gap-4 border-l border-nordic-dark/10 ml-2 pl-4">
               {user ? (
                 <div className="relative">
                   <button 
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     className="flex items-center gap-2 focus:outline-none"
                   >
-                    <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all shadow-sm">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all shadow-sm">
                       <img 
                         alt="Profile" 
                         className="w-full h-full object-cover" 
@@ -70,38 +69,51 @@ export default function Navbar() {
                   </button>
 
                   {isProfileOpen && (
-                    <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-nordic-dark/5 py-2 z-[60] overflow-hidden">
-                      <div className="px-4 py-2 border-b border-nordic-dark/5 mb-1">
-                        <p className="text-xs text-nordic-muted truncate">{user.email}</p>
+                    <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-nordic-dark/5 z-[60] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="px-6 py-4 border-b border-nordic-dark/5 bg-[#F8FAFA]">
+                        <p className="text-[11px] font-bold text-[#9BA3A2] uppercase tracking-[0.05em] mb-1.5">Cuenta</p>
+                        <p className="text-[15px] font-bold text-[#19322F] truncate">{user.email}</p>
                       </div>
-                      <Link 
-                        href="/profile" 
-                        className="flex items-center gap-3 px-4 py-2 text-sm text-nordic-dark hover:bg-mosque/5 transition-colors"
-                      >
-                        <span className="material-icons text-lg text-nordic-muted">person_outline</span>
-                        {t('auth.profile')}
-                      </Link>
-                      <Link 
-                        href="/saved" 
-                        className="flex items-center gap-3 px-4 py-2 text-sm text-nordic-dark hover:bg-mosque/5 transition-colors"
-                      >
-                        <span className="material-icons text-lg text-nordic-muted">favorite_border</span>
-                        {t('auth.saved')}
-                      </Link>
-                      <button 
-                        onClick={() => signOut()}
-                        className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors mt-1"
-                      >
-                        <span className="material-icons text-lg">logout</span>
-                        {t('auth.sign_out')}
-                      </button>
+                      <div className="py-2">
+                        <Link 
+                          href="/profile" 
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-4 px-6 py-3.5 text-[15px] font-medium text-[#19322F] hover:bg-[#F2F7F7] transition-colors"
+                        >
+                          <span className="material-icons text-xl text-[#9BA3A2]">person_outline</span>
+                          {t('auth.profile')}
+                        </Link>
+                        <Link 
+                          href="/saved" 
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-4 px-6 py-3.5 text-[15px] font-medium text-[#19322F] hover:bg-[#F2F7F7] transition-colors"
+                        >
+                          <span className="material-icons text-xl text-[#9BA3A2]">favorite_border</span>
+                          {t('auth.saved')}
+                        </Link>
+                      </div>
+                      <div className="border-t border-nordic-dark/5">
+                        <button 
+                          onClick={async () => {
+                            setIsProfileOpen(false);
+                            const { error } = await supabase.auth.signOut();
+                            if (!error) {
+                              window.location.href = '/';
+                            }
+                          }}
+                          className="flex items-center gap-4 w-full text-left px-6 py-4 text-[15px] font-medium text-[#E53935] hover:bg-[#FEECEB] transition-colors"
+                        >
+                          <span className="material-icons text-xl">logout</span>
+                          {t('auth.sign_out')}
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
               ) : (
                 <Link 
                   href="/login" 
-                  className="bg-nordic-dark text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-mosque transition-all shadow-sm hover:shadow-md active:scale-95"
+                  className="bg-nordic-dark text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-mosque transition-all shadow-sm hover:shadow-lg active:scale-95"
                 >
                   {t('auth.sign_in')}
                 </Link>
