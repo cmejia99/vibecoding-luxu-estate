@@ -106,7 +106,7 @@ export default async function PropertyDetails({ params }: { params: Promise<{ sl
               </div>
               <div className="bg-white p-2 rounded-xl shadow-sm border border-mosque/5">
                 <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 z-0">
-                  <MapWrapper location={property.location} className="w-full h-full" />
+                  <MapWrapper location={property.location} latitude={property.latitude} longitude={property.longitude} className="w-full h-full" />
                 </div>
               </div>
             </div>

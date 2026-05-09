@@ -9,6 +9,8 @@ export interface Property {
   beds: number;
   baths: number;
   area: number;
+  latitude: number;
+  longitude: number;
   images: string[];
   slug: string;
   status: 'FOR SALE' | 'FOR RENT';

@@ -18,29 +18,13 @@ const customIcon = L.icon({
 
 interface MapProps {
   location: string;
+  latitude?: number;
+  longitude?: number;
   className?: string;
 }
 
-export default function Map({ location, className }: MapProps) {
-  // We use standard coordinates for demo purposes if geocoding isn't implemented.
-  const [position, setPosition] = useState<[number, number]>([37.4419, -122.1430]); // Default Palo Alto
-
-  useEffect(() => {
-    // Basic mock geocoding based on location string
-    if (location.toLowerCase().includes('miami')) {
-      setPosition([25.7617, -80.1918]);
-    } else if (location.toLowerCase().includes('new york')) {
-      setPosition([40.7128, -74.0060]);
-    } else if (location.toLowerCase().includes('aspen')) {
-      setPosition([39.1911, -106.8175]);
-    } else if (location.toLowerCase().includes('beverly')) {
-      setPosition([34.0736, -118.4004]);
-    } else if (location.toLowerCase().includes('hawaii')) {
-      setPosition([21.3069, -157.8583]);
-    } else if (location.toLowerCase().includes('lake tahoe')) {
-      setPosition([39.0968, -120.0324]);
-    }
-  }, [location]);
+export default function Map({ location, latitude, longitude, className }: MapProps) {
+  const position: [number, number] = [latitude ?? 37.4419, longitude ?? -122.1430]; // Default Palo Alto if not provided
 
   return (
     <div className={className}>

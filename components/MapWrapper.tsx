@@ -13,9 +13,11 @@ const DynamicMap = dynamic(() => import('./Map'), {
 
 interface MapWrapperProps {
   location: string;
+  latitude?: number;
+  longitude?: number;
   className?: string;
 }
 
-export default function MapWrapper({ location, className }: MapWrapperProps) {
-  return <DynamicMap location={location} className={className} />;
+export default function MapWrapper({ location, latitude, longitude, className }: MapWrapperProps) {
+  return <DynamicMap location={location} latitude={latitude} longitude={longitude} className={className} />;
 }
