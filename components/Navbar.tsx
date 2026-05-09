@@ -3,9 +3,30 @@
 import Link from 'next/link';
 import LanguageSelector from './LanguageSelector';
 import { useTranslation } from '@/hooks/useTranslation';
+import { createClient } from '@/utils/supabase/client';
+import { useEffect, useState } from 'react';
+import { User } from '@supabase/supabase-js';
+import { signOut } from '@/app/auth/actions';
 
 export default function Navbar() {
   const { t } = useTranslation();
+  const [user, setUser] = useState<User | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   return (
     <nav className="sticky top-0 z-50 bg-background-light/95 backdrop-blur-md border-b border-nordic-dark/10">
@@ -31,15 +52,62 @@ export default function Navbar() {
               <span className="material-icons">notifications_none</span>
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-background-light"></span>
             </button>
-            <button className="flex items-center gap-2 pl-2 border-l border-nordic-dark/10 ml-2">
-              <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all">
-                <img 
-                  alt="Profile" 
-                  className="w-full h-full object-cover" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAWhQZ663Bd08kmzjbOPmUk4UIxYooNONShMEFXLR-DtmVi6Oz-TiaY77SPwFk7g0OobkeZEOMvt6v29mSOD0Xm2g95WbBG3ZjWXmiABOUwGU0LOySRfVDo-JTXQ0-gtwjWxbmue0qDm91m-zEOEZwAW6iRFB1qC1bAU-wkjxm67Sbztq8w7srHkFT9bVEC86qG-FzhOBTomhAurNRmx9l8Yfqabk328NfdKuVLckgCdaPsNFE3yN65MeoRi05GA_gXIMwG4YDIeA"
-                />
-              </div>
-            </button>
+            
+            <div className="relative border-l border-nordic-dark/10 ml-2 pl-2">
+              {user ? (
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-2 focus:outline-none"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden ring-2 ring-transparent hover:ring-mosque transition-all shadow-sm">
+                      <img 
+                        alt="Profile" 
+                        className="w-full h-full object-cover" 
+                        src={user.user_metadata.avatar_url || user.user_metadata.picture || 'https://www.gravatar.com/avatar/?d=mp'}
+                      />
+                    </div>
+                  </button>
+
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-nordic-dark/5 py-2 z-[60] overflow-hidden">
+                      <div className="px-4 py-2 border-b border-nordic-dark/5 mb-1">
+                        <p className="text-xs text-nordic-muted truncate">{user.email}</p>
+                      </div>
+                      <Link 
+                        href="/profile" 
+                        className="flex items-center gap-3 px-4 py-2 text-sm text-nordic-dark hover:bg-mosque/5 transition-colors"
+                      >
+                        <span className="material-icons text-lg text-nordic-muted">person_outline</span>
+                        {t('auth.profile')}
+                      </Link>
+                      <Link 
+                        href="/saved" 
+                        className="flex items-center gap-3 px-4 py-2 text-sm text-nordic-dark hover:bg-mosque/5 transition-colors"
+                      >
+                        <span className="material-icons text-lg text-nordic-muted">favorite_border</span>
+                        {t('auth.saved')}
+                      </Link>
+                      <button 
+                        onClick={() => signOut()}
+                        className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors mt-1"
+                      >
+                        <span className="material-icons text-lg">logout</span>
+                        {t('auth.sign_out')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link 
+                  href="/login" 
+                  className="bg-nordic-dark text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-mosque transition-all shadow-sm hover:shadow-md active:scale-95"
+                >
+                  {t('auth.sign_in')}
+                </Link>
+              )}
+            </div>
+
             <div className="hidden sm:block">
               <LanguageSelector />
             </div>

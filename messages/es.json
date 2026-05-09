@@ -85,5 +85,21 @@
   },
   "footer": {
     "rights": "© 2023 LuxeEstate Inc. Todos los derechos reservados."
+  },
+  "auth": {
+    "login_title": "Bienvenido a LuxeEstate",
+    "login_subtitle": "Desbloquea propiedades exclusivas en todo el mundo.",
+    "continue_google": "Continuar con Google",
+    "continue_github": "Continuar con GitHub",
+    "no_account": "¿No tienes una cuenta?",
+    "sign_up": "Regístrate",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "help": "Centro de Ayuda",
+    "sign_in": "Iniciar Sesión",
+    "sign_out": "Cerrar Sesión",
+    "profile": "Perfil",
+    "notifications": "Notificaciones",
+    "saved": "Casas Guardadas"
   }
 }

@@ -85,5 +85,21 @@
   },
   "footer": {
     "rights": "© 2023 LuxeEstate Inc. All rights reserved."
+  },
+  "auth": {
+    "login_title": "Welcome to LuxeEstate",
+    "login_subtitle": "Unlock exclusive properties worldwide.",
+    "continue_google": "Continue with Google",
+    "continue_github": "Continue with GitHub",
+    "no_account": "Don't have an account?",
+    "sign_up": "Sign up",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "help": "Help Center",
+    "sign_in": "Sign In",
+    "sign_out": "Sign Out",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "saved": "Saved Homes"
   }
 }

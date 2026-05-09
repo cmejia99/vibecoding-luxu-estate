@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { i18n } from './lib/i18n-config';
+import { updateSession } from '@/utils/supabase/middleware';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const locale = request.cookies.get('NEXT_LOCALE')?.value;
 
-  // If locale is already set and valid, do nothing
+  // Update Supabase session
+  const supabaseResponse = await updateSession(request);
+
+  // If locale is already set and valid, just return the supabaseResponse
   if (locale && i18n.locales.includes(locale as any)) {
-    return NextResponse.next();
+    return supabaseResponse;
   }
 
   // Otherwise, detect from headers or use default
@@ -20,13 +24,12 @@ export function middleware(request: NextRequest) {
     if (matched) detectedLocale = matched;
   }
 
-  const response = NextResponse.next();
-  response.cookies.set('NEXT_LOCALE', detectedLocale, {
+  supabaseResponse.cookies.set('NEXT_LOCALE', detectedLocale, {
     path: '/',
     maxAge: 60 * 60 * 24 * 365, // 1 year
   });
 
-  return response;
+  return supabaseResponse;
 }
 
 export const config = {
