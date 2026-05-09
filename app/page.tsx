@@ -4,6 +4,7 @@ import FeaturedPropertyCard from '@/components/FeaturedPropertyCard';
 import PropertyCard from '@/components/PropertyCard';
 import Pagination from '@/components/Pagination';
 import SearchSection from '@/components/SearchSection';
+import Link from 'next/link';
 import { getFeaturedProperties, getMarketProperties, PAGE_SIZE, PropertyFilters } from '@/lib/properties';
 
 export default async function Home({
@@ -26,12 +27,21 @@ export default async function Home({
     minBeds: getParam('minBeds') ? Number(getParam('minBeds')) : undefined,
     minBaths: getParam('minBaths') ? Number(getParam('minBaths')) : undefined,
     amenities: getParam('amenities') ? getParam('amenities')!.split(',') : undefined,
+    status: getParam('status'),
   };
 
-  const [featuredProperties, { properties: marketProperties, total }] = await Promise.all([
+  const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
+    if (value === undefined || value === '' || value === 'All') return false;
+    if (Array.isArray(value) && value.length === 0) return false;
+    return true;
+  });
+
+  const [featuredPropertiesRaw, { properties: marketProperties, total }] = await Promise.all([
     getFeaturedProperties(),
     getMarketProperties(currentPage, PAGE_SIZE, filters),
   ]);
+
+  const featuredProperties = featuredPropertiesRaw.slice(0, 2);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
@@ -45,22 +55,24 @@ export default async function Home({
           </Suspense>
         </section>
 
-        <section className="mb-16">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-light text-nordic-dark">Featured Collections</h2>
-              <p className="text-nordic-muted mt-1 text-sm">Curated properties for the discerning eye.</p>
+        {!hasActiveFilters && (
+          <section className="mb-16">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-light text-nordic-dark">Featured Collections</h2>
+                <p className="text-nordic-muted mt-1 text-sm">Curated properties for the discerning eye.</p>
+              </div>
+              <a className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity" href="#">
+                View all <span className="material-icons text-sm">arrow_forward</span>
+              </a>
             </div>
-            <a className="hidden sm:flex items-center gap-1 text-sm font-medium text-mosque hover:opacity-70 transition-opacity" href="#">
-              View all <span className="material-icons text-sm">arrow_forward</span>
-            </a>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {featuredProperties.map(property => (
-              <FeaturedPropertyCard key={property.id} property={property} />
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {featuredProperties.map(property => (
+                <FeaturedPropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+          </section>
+        )}
 
         <section>
           <div className="flex items-end justify-between mb-8">
@@ -75,10 +87,52 @@ export default async function Home({
                 )}
               </p>
             </div>
-            <div className="hidden md:flex bg-white p-1 rounded-lg">
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium bg-nordic-dark text-white shadow-sm cursor-pointer">All</button>
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark cursor-pointer">Buy</button>
-              <button className="px-4 py-1.5 rounded-md text-sm font-medium text-nordic-muted hover:text-nordic-dark cursor-pointer">Rent</button>
+            <div className="hidden md:flex bg-white p-1 rounded-lg shadow-sm border border-nordic-dark/5">
+              <Link 
+                href={`/?${(() => {
+                  const p = new URLSearchParams(params as any);
+                  p.delete('status');
+                  p.set('page', '1');
+                  return p.toString();
+                })()}`}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  (!filters.status || filters.status === 'All') 
+                    ? 'bg-nordic-dark text-white' 
+                    : 'text-nordic-muted hover:text-nordic-dark'
+                }`}
+              >
+                All
+              </Link>
+              <Link 
+                href={`/?${(() => {
+                  const p = new URLSearchParams(params as any);
+                  p.set('status', 'Buy');
+                  p.set('page', '1');
+                  return p.toString();
+                })()}`}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  filters.status === 'Buy' 
+                    ? 'bg-nordic-dark text-white' 
+                    : 'text-nordic-muted hover:text-nordic-dark'
+                }`}
+              >
+                Buy
+              </Link>
+              <Link 
+                href={`/?${(() => {
+                  const p = new URLSearchParams(params as any);
+                  p.set('status', 'Rent');
+                  p.set('page', '1');
+                  return p.toString();
+                })()}`}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  filters.status === 'Rent' 
+                    ? 'bg-nordic-dark text-white' 
+                    : 'text-nordic-muted hover:text-nordic-dark'
+                }`}
+              >
+                Rent
+              </Link>
             </div>
           </div>
 

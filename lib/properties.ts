@@ -30,6 +30,7 @@ export interface PropertyFilters {
   minBeds?: number;
   minBaths?: number;
   amenities?: string[];
+  status?: string;
 }
 
 export const PAGE_SIZE = 8;
@@ -89,6 +90,15 @@ export async function getMarketProperties(
 
   if (filters.amenities && filters.amenities.length > 0) {
     query = query.contains('amenities', filters.amenities);
+  }
+
+  if (filters.status && filters.status !== 'All') {
+    const statusMap: Record<string, string> = {
+      Buy: 'FOR SALE',
+      Rent: 'FOR RENT',
+    };
+    const dbStatus = statusMap[filters.status] || filters.status;
+    query = query.eq('status', dbStatus);
   }
 
   const { data, error, count } = await query.range(from, to);
