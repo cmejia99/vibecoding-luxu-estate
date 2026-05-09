@@ -1,20 +1,36 @@
+import { Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import FeaturedPropertyCard from '@/components/FeaturedPropertyCard';
 import PropertyCard from '@/components/PropertyCard';
 import Pagination from '@/components/Pagination';
-import { getFeaturedProperties, getMarketProperties, PAGE_SIZE } from '@/lib/properties';
+import SearchSection from '@/components/SearchSection';
+import { getFeaturedProperties, getMarketProperties, PAGE_SIZE, PropertyFilters } from '@/lib/properties';
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { page: pageParam } = await searchParams;
-  const currentPage = Math.max(1, parseInt((Array.isArray(pageParam) ? pageParam[0] : pageParam) ?? '1', 10));
+  const params = await searchParams;
+
+  const getParam = (key: string) =>
+    Array.isArray(params[key]) ? (params[key] as string[])[0] : (params[key] as string | undefined);
+
+  const currentPage = Math.max(1, parseInt(getParam('page') ?? '1', 10));
+
+  const filters: PropertyFilters = {
+    query: getParam('query'),
+    type: getParam('type'),
+    minPrice: getParam('minPrice') ? Number(getParam('minPrice')) : undefined,
+    maxPrice: getParam('maxPrice') ? Number(getParam('maxPrice')) : undefined,
+    minBeds: getParam('minBeds') ? Number(getParam('minBeds')) : undefined,
+    minBaths: getParam('minBaths') ? Number(getParam('minBaths')) : undefined,
+    amenities: getParam('amenities') ? getParam('amenities')!.split(',') : undefined,
+  };
 
   const [featuredProperties, { properties: marketProperties, total }] = await Promise.all([
     getFeaturedProperties(),
-    getMarketProperties(currentPage, PAGE_SIZE),
+    getMarketProperties(currentPage, PAGE_SIZE, filters),
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -24,44 +40,9 @@ export default async function Home({
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <section className="py-12 md:py-16">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-nordic-dark leading-tight">
-              Find your <span className="relative inline-block">
-                <span className="relative z-10 font-medium">sanctuary</span>
-                <span className="absolute bottom-2 left-0 w-full h-3 bg-mosque/20 -rotate-1 z-0"></span>
-              </span>.
-            </h1>
-            <div className="relative group max-w-2xl mx-auto">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span className="material-icons text-nordic-muted text-2xl group-focus-within:text-mosque transition-colors">search</span>
-              </div>
-              <input className="block w-full pl-12 pr-4 py-4 rounded-xl border-none bg-white text-nordic-dark shadow-soft placeholder-nordic-muted/60 focus:ring-2 focus:ring-mosque focus:bg-white transition-all text-lg outline-none" placeholder="Search by city, neighborhood, or address..." type="text"/>
-              <button className="absolute inset-y-2 right-2 px-6 bg-mosque hover:bg-mosque/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-mosque/20 cursor-pointer">
-                Search
-              </button>
-            </div>
-            <div className="flex items-center justify-center gap-3 overflow-x-auto hide-scroll py-2 px-4 -mx-4">
-              <button className="whitespace-nowrap px-5 py-2 rounded-full bg-nordic-dark text-white text-sm font-medium shadow-lg shadow-nordic-dark/10 transition-transform hover:-translate-y-0.5 cursor-pointer">
-                All
-              </button>
-              <button className="whitespace-nowrap px-5 py-2 rounded-full bg-white border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 text-sm font-medium transition-all hover:bg-mosque/5 cursor-pointer">
-                House
-              </button>
-              <button className="whitespace-nowrap px-5 py-2 rounded-full bg-white border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 text-sm font-medium transition-all hover:bg-mosque/5 cursor-pointer">
-                Apartment
-              </button>
-              <button className="whitespace-nowrap px-5 py-2 rounded-full bg-white border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 text-sm font-medium transition-all hover:bg-mosque/5 cursor-pointer">
-                Villa
-              </button>
-              <button className="whitespace-nowrap px-5 py-2 rounded-full bg-white border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 text-sm font-medium transition-all hover:bg-mosque/5 cursor-pointer">
-                Penthouse
-              </button>
-              <div className="w-px h-6 bg-nordic-dark/10 mx-2"></div>
-              <button className="whitespace-nowrap flex items-center gap-1 px-4 py-2 rounded-full text-nordic-dark font-medium text-sm hover:bg-black/5 transition-colors cursor-pointer">
-                <span className="material-icons text-base">tune</span> Filters
-              </button>
-            </div>
-          </div>
+          <Suspense>
+            <SearchSection totalCount={total} />
+          </Suspense>
         </section>
 
         <section className="mb-16">
@@ -89,7 +70,7 @@ export default async function Home({
                 Fresh opportunities added this week.
                 {total > 0 && (
                   <span className="ml-2 text-mosque font-medium">
-                    {total} properties
+                    {total} {total === 1 ? 'property' : 'properties'}
                   </span>
                 )}
               </p>
@@ -110,7 +91,8 @@ export default async function Home({
           ) : (
             <div className="text-center py-16 text-nordic-muted">
               <span className="material-icons text-5xl mb-4 block opacity-30">home_work</span>
-              <p>No properties found.</p>
+              <p className="text-lg font-medium">No properties found.</p>
+              <p className="text-sm mt-1 opacity-70">Try adjusting your search or filters.</p>
             </div>
           )}
 
