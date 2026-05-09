@@ -1,7 +1,12 @@
+'use client';
+
 import { Property } from '../lib/properties';
 import Link from 'next/link';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function PropertyCard({ property }: { property: Property }) {
+  const { t } = useTranslation();
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -19,18 +24,18 @@ export default function PropertyCard({ property }: { property: Property }) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
           src={property.images?.[0] || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
         />
-        <button className="absolute top-3 right-3 p-2 bg-white/90 rounded-full hover:bg-mosque hover:text-white transition-colors text-nordic-dark">
-          <span className="material-icons text-lg">favorite_border</span>
+        <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-mosque hover:text-white transition-all">
+          <span className="material-icons text-xl">favorite_border</span>
         </button>
-        <div className={`absolute bottom-3 left-3 ${property.status === 'FOR RENT' ? 'bg-mosque/90' : 'bg-nordic-dark/90'} text-white text-xs font-bold px-2 py-1 rounded`}>
-          {property.status}
+        <div className={`absolute bottom-3 left-3 ${property.status === 'FOR RENT' ? 'bg-mosque/90' : 'bg-nordic-dark/90'} text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider`}>
+          {property.status === 'FOR RENT' ? t('details.for_rent') : t('nav.buy')}
         </div>
       </div>
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-baseline mb-2">
           <h3 className="font-bold text-lg text-nordic-dark">
             {property.status === 'FOR RENT' && property.price_per_month ? (
-              <>{formatPrice(property.price_per_month)}<span className="text-sm font-normal text-nordic-muted">/mo</span></>
+              <>{formatPrice(property.price_per_month)}<span className="text-sm font-normal text-nordic-muted">{t('details.per_month')}</span></>
             ) : (
               formatPrice(property.price)
             )}

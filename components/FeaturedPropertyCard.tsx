@@ -1,7 +1,12 @@
+'use client';
+
 import { Property } from '../lib/properties';
 import Link from 'next/link';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function FeaturedPropertyCard({ property }: { property: Property }) {
+  const { t } = useTranslation();
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -19,16 +24,18 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
           src={property.images?.[0] || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
         />
-        {property.is_exclusive && (
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">
-            Exclusive
-          </div>
-        )}
-        {property.is_new && (
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">
-            New Arrival
-          </div>
-        )}
+        <div className="absolute top-4 left-4 flex gap-2">
+          {property.is_exclusive && (
+            <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">
+              {t('details.exclusive')}
+            </div>
+          )}
+          {property.is_new && (
+            <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-nordic-dark">
+              {t('details.new')}
+            </div>
+          )}
+        </div>
         <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-nordic-dark hover:bg-mosque hover:text-white transition-all">
           <span className="material-icons text-xl">favorite_border</span>
         </button>
@@ -48,10 +55,10 @@ export default function FeaturedPropertyCard({ property }: { property: Property 
         </div>
         <div className="flex items-center gap-6 mt-6 pt-6 border-t border-nordic-dark/5">
           <div className="flex items-center gap-2 text-nordic-muted text-sm">
-            <span className="material-icons text-lg">king_bed</span> {property.beds} Beds
+            <span className="material-icons text-lg">king_bed</span> {property.beds} {t('details.bedrooms')}
           </div>
           <div className="flex items-center gap-2 text-nordic-muted text-sm">
-            <span className="material-icons text-lg">bathtub</span> {property.baths} Baths
+            <span className="material-icons text-lg">bathtub</span> {property.baths} {t('details.bathrooms')}
           </div>
           <div className="flex items-center gap-2 text-nordic-muted text-sm">
             <span className="material-icons text-lg">square_foot</span> {property.area.toLocaleString()} m²

@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "buy": "Acheter",
+    "rent": "Louer",
+    "sell": "Vendre",
+    "saved_homes": "Maisons Enregistrées"
+  },
+  "home": {
+    "featured_title": "Collections Vedettes",
+    "featured_subtitle": "Propriétés sélectionnées pour l'œil averti.",
+    "view_all": "Voir tout",
+    "market_title": "Nouveau sur le Marché",
+    "market_subtitle": "Nouvelles opportunités ajoutées cette semaine.",
+    "property_count": "{count} {count, plural, =1 {propriété} other {propriétés}}",
+    "status_all": "Tous",
+    "no_properties": "Aucune propriété trouvée.",
+    "no_properties_sub": "Essayez d'ajuster votre recherche ou vos filtres."
+  },
+  "search": {
+    "title_find": "Trouvez votre",
+    "title_sanctuary": "sanctuaire",
+    "placeholder": "Recherche par ville, quartier ou adresse...",
+    "button": "Rechercher",
+    "filters": "Filtres",
+    "types": {
+      "All": "Tous",
+      "Any Type": "Tous Types",
+      "House": "Maison",
+      "Apartment": "Appartement",
+      "Villa": "Villa",
+      "Penthouse": "Penthouse",
+      "Studio": "Studio"
+    }
+  },
+  "details": {
+    "exclusive": "Exclusif",
+    "new": "Nouveau",
+    "for_rent": "À Louer",
+    "view_photos": "Voir Toutes les Photos",
+    "per_month": "/mois",
+    "top_agent": "Agent le Mieux Noté",
+    "schedule_visit": "Planifier une Visite",
+    "contact_agent": "Contacter l'Agent",
+    "features_title": "Caractéristiques de {title}",
+    "sq_meters": "Mètres Carrés",
+    "bedrooms": "Chambres",
+    "bathrooms": "Salles de Bain",
+    "property_type": "Type de Propriété",
+    "about_title": "À propos de cette maison",
+    "about_desc": "Découvrez le luxe moderne dans ce superbe {type} situé à {location}. Conçue en mettant l'accent sur la vie intérieure-extérieure, la résidence présente des détails exquis qui inondent les intérieurs de lumière naturelle.",
+    "about_desc_2": "L'espace de vie à aire ouverte est équipé de finitions haut de gamme, parfaites pour se détendre ou recevoir des invités. Retirez-vous dans la suite principale, un sanctuaire de relaxation avec une baignoire inspirée du spa et de belles vues.",
+    "read_more": "Lire la suite",
+    "amenities": "Équipements",
+    "smart_home": "Système de Maison Intelligente",
+    "heating_cooling": "Chauffage et Climatisation Centraux",
+    "parking": "Parking Privé",
+    "security": "Système de Sécurité",
+    "est_payment": "Paiement Estimé",
+    "starting_from": "À partir de",
+    "with_down": "avec 20% d'acompte",
+    "calc_mortgage": "Calculer l'Hypothèque",
+    "not_found": "Propriété non trouvée"
+  },
+  "filters": {
+    "title": "Filtres",
+    "location": "Emplacement",
+    "location_placeholder": "Ville, quartier ou adresse",
+    "price_range": "Gamme de Prix",
+    "any": "Tous",
+    "min_price": "Prix Min",
+    "max_price": "Prix Max",
+    "no_limit": "Sans limite",
+    "amenities_title": "Équipements et Caractéristiques",
+    "clear_all": "Effacer tous les filtres",
+    "show_homes": "Afficher {count} {count, plural, =1 {Maison} other {Maisons}}",
+    "any_plus": "Tous",
+    "amenity": {
+      "Swimming Pool": "Piscine",
+      "Gym": "Salle de Sport",
+      "Parking": "Parking",
+      "Air Conditioning": "Climatisation",
+      "High-speed Wifi": "Wifi Haut Débit",
+      "Patio / Terrace": "Patio / Terrasse"
+    }
+  },
+  "footer": {
+    "rights": "© 2023 LuxeEstate Inc. Tous droits réservés."
+  }
+}

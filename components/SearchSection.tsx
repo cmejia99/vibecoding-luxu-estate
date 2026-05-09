@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const FiltersModal = dynamic(() => import('./FiltersModal'), { ssr: false });
 
@@ -16,11 +17,13 @@ export default function SearchSection({ totalCount }: SearchSectionProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query') ?? '');
   const [activeType, setActiveType] = useState(searchParams.get('type') ?? 'All');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // ... building logic ...
   const hasActiveFilters = !!(
     searchParams.get('minPrice') ||
     searchParams.get('maxPrice') ||
@@ -58,9 +61,9 @@ export default function SearchSection({ totalCount }: SearchSectionProps) {
     <>
       <div className="max-w-3xl mx-auto text-center space-y-8">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-nordic-dark leading-tight">
-          Find your{' '}
+          {t('search.title_find')}{' '}
           <span className="relative inline-block">
-            <span className="relative z-10 font-medium">sanctuary</span>
+            <span className="relative z-10 font-medium">{t('search.title_sanctuary')}</span>
             <span className="absolute bottom-2 left-0 w-full h-3 bg-mosque/20 -rotate-1 z-0" />
           </span>
           .
@@ -80,14 +83,14 @@ export default function SearchSection({ totalCount }: SearchSectionProps) {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             className="block w-full pl-12 pr-4 py-4 rounded-xl border-none bg-white text-nordic-dark shadow-soft placeholder-nordic-muted/60 focus:ring-2 focus:ring-mosque focus:bg-white transition-all text-lg outline-none"
-            placeholder="Search by city, neighborhood, or address..."
+            placeholder={t('search.placeholder')}
           />
           <button
             id="search-button"
             onClick={handleSearch}
             className="absolute inset-y-2 right-2 px-6 bg-mosque hover:bg-mosque/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-mosque/20 cursor-pointer"
           >
-            Search
+            {t('search.button')}
           </button>
         </div>
 
@@ -104,7 +107,7 @@ export default function SearchSection({ totalCount }: SearchSectionProps) {
                   : 'bg-white border border-nordic-dark/5 text-nordic-muted hover:text-nordic-dark hover:border-mosque/50 hover:bg-mosque/5'
               }`}
             >
-              {type}
+              {t(`search.types.${type}`)}
             </button>
           ))}
           <div className="w-px h-6 bg-nordic-dark/10 mx-2" />
@@ -118,7 +121,7 @@ export default function SearchSection({ totalCount }: SearchSectionProps) {
             }`}
           >
             <span className="material-icons text-base">tune</span>
-            Filters
+            {t('search.filters')}
             {hasActiveFilters && (
               <span className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-mosque text-white text-[10px] font-bold">
                 ✓

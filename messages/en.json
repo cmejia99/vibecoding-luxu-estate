@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "buy": "Buy",
+    "rent": "Rent",
+    "sell": "Sell",
+    "saved_homes": "Saved Homes"
+  },
+  "home": {
+    "featured_title": "Featured Collections",
+    "featured_subtitle": "Curated properties for the discerning eye.",
+    "view_all": "View all",
+    "market_title": "New in Market",
+    "market_subtitle": "Fresh opportunities added this week.",
+    "property_count": "{count} {count, plural, =1 {property} other {properties}}",
+    "status_all": "All",
+    "no_properties": "No properties found.",
+    "no_properties_sub": "Try adjusting your search or filters."
+  },
+  "search": {
+    "title_find": "Find your",
+    "title_sanctuary": "sanctuary",
+    "placeholder": "Search by city, neighborhood, or address...",
+    "button": "Search",
+    "filters": "Filters",
+    "types": {
+      "All": "All",
+      "Any Type": "Any Type",
+      "House": "House",
+      "Apartment": "Apartment",
+      "Villa": "Villa",
+      "Penthouse": "Penthouse",
+      "Studio": "Studio"
+    }
+  },
+  "details": {
+    "exclusive": "Exclusive",
+    "new": "New",
+    "for_rent": "For Rent",
+    "view_photos": "View All Photos",
+    "per_month": "/mo",
+    "top_agent": "Top Rated Agent",
+    "schedule_visit": "Schedule Visit",
+    "contact_agent": "Contact Agent",
+    "features_title": "{title} Features",
+    "sq_meters": "Square Meters",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "property_type": "Property Type",
+    "about_title": "About this home",
+    "about_desc": "Experience modern luxury in this stunning {type} located in {location}. Designed with an emphasis on indoor-outdoor living, the residence features exquisite details that flood the interiors with natural light.",
+    "about_desc_2": "The open-concept living area is equipped with top-of-the-line finishes, perfect for relaxing or entertaining guests. Retreat to the primary suite, a sanctuary of relaxation with a spa-inspired bath and beautiful views.",
+    "read_more": "Read more",
+    "amenities": "Amenities",
+    "smart_home": "Smart Home System",
+    "heating_cooling": "Central Heating & Cooling",
+    "parking": "Private Parking",
+    "security": "Security System",
+    "est_payment": "Estimated Payment",
+    "starting_from": "Starting from",
+    "with_down": "with 20% down",
+    "calc_mortgage": "Calculate Mortgage",
+    "not_found": "Property not found"
+  },
+  "filters": {
+    "title": "Filters",
+    "location": "Location",
+    "location_placeholder": "City, neighborhood, or address",
+    "price_range": "Price Range",
+    "any": "Any",
+    "min_price": "Min Price",
+    "max_price": "Max Price",
+    "no_limit": "No limit",
+    "amenities_title": "Amenities & Features",
+    "clear_all": "Clear all filters",
+    "show_homes": "Show {count} {count, plural, =1 {Home} other {Homes}}",
+    "any_plus": "Any",
+    "amenity": {
+      "Swimming Pool": "Swimming Pool",
+      "Gym": "Gym",
+      "Parking": "Parking",
+      "Air Conditioning": "Air Conditioning",
+      "High-speed Wifi": "High-speed Wifi",
+      "Patio / Terrace": "Patio / Terrace"
+    }
+  },
+  "footer": {
+    "rights": "© 2023 LuxeEstate Inc. All rights reserved."
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const AMENITY_OPTIONS = [
   { value: 'Swimming Pool', icon: 'pool' },
@@ -23,6 +24,7 @@ interface FiltersModalProps {
 export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersModalProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const [location, setLocation] = useState(searchParams.get('query') ?? '');
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') ?? '');
@@ -72,7 +74,7 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
-      aria-label="Property Filters"
+      aria-label={t('filters.title')}
     >
       {/* Backdrop */}
       <div
@@ -84,7 +86,7 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
       <div className="relative z-10 w-full max-w-2xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <header className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-30">
-          <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Filters</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-gray-900">{t('filters.title')}</h2>
           <button
             onClick={onClose}
             className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
@@ -100,7 +102,7 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
           {/* Location */}
           <section>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-              Location
+              {t('filters.location')}
             </label>
             <div className="relative group">
               <span className="material-icons absolute left-4 top-3.5 text-gray-400 group-focus-within:text-[#1a3a2e] transition-colors">
@@ -110,7 +112,7 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="City, neighborhood, or address"
+                placeholder={t('filters.location_placeholder')}
                 className="w-full pl-12 pr-4 py-3 bg-[#f5f8f6] border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-[#1a3a2e] focus:bg-white transition-all shadow-sm outline-none"
               />
             </div>
@@ -120,17 +122,17 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
           <section>
             <div className="flex justify-between items-end mb-4">
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Price Range
+                {t('filters.price_range')}
               </label>
               {(minPrice || maxPrice) && (
                 <span className="text-sm font-medium text-[#1a3a2e]">
-                  {minPrice ? `$${minPrice}` : 'Any'} – {maxPrice ? `$${maxPrice}` : 'Any'}
+                  {minPrice ? `$${minPrice}` : t('filters.any')} – {maxPrice ? `$${maxPrice}` : t('filters.any')}
                 </span>
               )}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-[#f5f8f6] p-3 rounded-lg border border-transparent focus-within:border-[#1a3a2e]/30 transition-colors">
-                <label className="block text-[10px] text-gray-500 uppercase font-medium mb-1">Min Price</label>
+                <label className="block text-[10px] text-gray-500 uppercase font-medium mb-1">{t('filters.min_price')}</label>
                 <div className="flex items-center">
                   <span className="text-gray-400 mr-1">$</span>
                   <input
@@ -143,14 +145,14 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
                 </div>
               </div>
               <div className="bg-[#f5f8f6] p-3 rounded-lg border border-transparent focus-within:border-[#1a3a2e]/30 transition-colors">
-                <label className="block text-[10px] text-gray-500 uppercase font-medium mb-1">Max Price</label>
+                <label className="block text-[10px] text-gray-500 uppercase font-medium mb-1">{t('filters.max_price')}</label>
                 <div className="flex items-center">
                   <span className="text-gray-400 mr-1">$</span>
                   <input
                     type="text"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
-                    placeholder="No limit"
+                    placeholder={t('filters.no_limit')}
                     className="w-full bg-transparent border-0 p-0 text-gray-900 font-medium focus:ring-0 text-sm outline-none"
                   />
                 </div>
@@ -163,7 +165,7 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
             {/* Property Type */}
             <div className="space-y-3">
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Property Type
+                {t('details.property_type')}
               </label>
               <div className="relative">
                 <select
@@ -171,8 +173,8 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
                   onChange={(e) => setPropertyType(e.target.value)}
                   className="w-full bg-[#f5f8f6] border-0 rounded-lg py-3 pl-4 pr-10 text-gray-900 appearance-none focus:ring-2 focus:ring-[#1a3a2e] cursor-pointer outline-none"
                 >
-                  {PROPERTY_TYPES.map((t) => (
-                    <option key={t}>{t}</option>
+                  {PROPERTY_TYPES.map((type) => (
+                    <option key={type} value={type}>{t(`search.types.${type}`)}</option>
                   ))}
                 </select>
                 <span className="material-icons absolute right-3 top-3 text-gray-400 pointer-events-none">
@@ -183,15 +185,15 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
 
             {/* Beds & Baths */}
             <div className="space-y-4">
-              <CounterRow label="Bedrooms" value={beds} onChange={setBeds} />
-              <CounterRow label="Bathrooms" value={baths} onChange={setBaths} />
+              <CounterRow label={t('details.bedrooms')} value={beds} onChange={setBeds} anyLabel={t('filters.any_plus')} />
+              <CounterRow label={t('details.bathrooms')} value={baths} onChange={setBaths} anyLabel={t('filters.any_plus')} />
             </div>
           </section>
 
           {/* Amenities */}
           <section>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-              Amenities &amp; Features
+              {t('filters.amenities_title')}
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {AMENITY_OPTIONS.map(({ value, icon }) => {
@@ -218,7 +220,7 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
                       >
                         {icon}
                       </span>
-                      {value}
+                      {t(`filters.amenity.${value}`)}
                     </div>
                     {isActive && (
                       <div className="absolute top-2 right-2 w-2 h-2 bg-[#1a3a2e] rounded-full" />
@@ -236,13 +238,13 @@ export default function FiltersModal({ isOpen, onClose, totalCount }: FiltersMod
             onClick={handleClear}
             className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors underline decoration-gray-300 underline-offset-4"
           >
-            Clear all filters
+            {t('filters.clear_all')}
           </button>
           <button
             onClick={handleApply}
             className="bg-[#1a3a2e] hover:bg-[#1a3a2e]/90 text-white px-8 py-3 rounded-lg font-medium shadow-lg shadow-[#1a3a2e]/30 transition-all hover:shadow-[#1a3a2e]/40 flex items-center gap-2 active:scale-95"
           >
-            Show {totalCount} Homes
+            {t('filters.show_homes', { count: totalCount })}
             <span className="material-icons text-sm">arrow_forward</span>
           </button>
         </footer>
@@ -255,9 +257,10 @@ interface CounterRowProps {
   label: string;
   value: number;
   onChange: (val: number) => void;
+  anyLabel: string;
 }
 
-function CounterRow({ label, value, onChange }: CounterRowProps) {
+function CounterRow({ label, value, onChange, anyLabel }: CounterRowProps) {
   return (
     <div className="flex justify-between items-center">
       <span className="text-sm font-medium text-gray-900">{label}</span>
@@ -270,8 +273,8 @@ function CounterRow({ label, value, onChange }: CounterRowProps) {
         >
           <span className="material-icons text-base">remove</span>
         </button>
-        <span className="text-sm font-semibold w-6 text-center">
-          {value === 0 ? 'Any' : `${value}+`}
+        <span className="text-sm font-semibold w-8 text-center">
+          {value === 0 ? anyLabel : `${value}+`}
         </span>
         <button
           onClick={() => onChange(value + 1)}
