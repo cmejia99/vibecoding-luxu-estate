@@ -10,6 +10,7 @@ import { User } from '@supabase/supabase-js';
 export default function Navbar() {
   const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const supabase = createClient();
 
@@ -26,6 +27,18 @@ export default function Navbar() {
 
     return () => subscription.unsubscribe();
   }, [supabase]);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      if (user) {
+        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        setProfile(data);
+      } else {
+        setProfile(null);
+      }
+    };
+    getProfile();
+  }, [user, supabase]);
 
   return (
     <nav className="sticky top-0 z-50 bg-background-light/95 backdrop-blur-md border-b border-nordic-dark/10">
@@ -83,6 +96,16 @@ export default function Navbar() {
                           <span className="material-icons text-xl text-[#9BA3A2]">person_outline</span>
                           {t('auth.profile')}
                         </Link>
+                        {profile?.role === 'admin' && (
+                          <Link 
+                            href="/admin/dashboard" 
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-4 px-6 py-3.5 text-[15px] font-medium text-[#19322F] hover:bg-[#F2F7F7] transition-colors"
+                          >
+                            <span className="material-icons text-xl text-[#9BA3A2]">dashboard</span>
+                            Admin Dashboard
+                          </Link>
+                        )}
                         <Link 
                           href="/saved" 
                           onClick={() => setIsProfileOpen(false)}

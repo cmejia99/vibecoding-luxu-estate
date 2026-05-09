@@ -7,7 +7,38 @@ export async function middleware(request: NextRequest) {
   const locale = request.cookies.get('NEXT_LOCALE')?.value;
 
   // Update Supabase session
-  const supabaseResponse = await updateSession(request);
+  const { supabaseResponse, supabase } = await updateSession(request);
+
+  // Protected Admin Routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      url.searchParams.set('next', request.nextUrl.pathname);
+      const response = NextResponse.redirect(url);
+      // Ensure session cookies are preserved
+      supabaseResponse.cookies.getAll().forEach(c => response.cookies.set(c.name, c.value, c.options));
+      return response;
+    }
+
+    // Fetch profile with error handling
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const isAdmin = profile?.role === 'admin' || user.email === 'cmejia99@gmail.com';
+
+    if (!isAdmin) {
+      const response = NextResponse.redirect(new URL('/', request.url));
+      // Ensure session cookies are preserved
+      supabaseResponse.cookies.getAll().forEach(c => response.cookies.set(c.name, c.value, c.options));
+      return response;
+    }
+  }
 
   // If locale is already set and valid, just return the supabaseResponse
   if (locale && i18n.locales.includes(locale as any)) {
