@@ -46,7 +46,7 @@ export function LanguageProvider({
     if (typeof value !== 'string') return key;
 
     if (params) {
-      let result = value;
+      let result: string = value;
       Object.entries(params).forEach(([paramKey, paramValue]) => {
         // Simple pluralization support
         if (result.includes('{count, plural')) {
