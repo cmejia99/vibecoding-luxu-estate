@@ -19,7 +19,7 @@ export async function proxy(request: NextRequest) {
       url.searchParams.set('next', request.nextUrl.pathname);
       const response = NextResponse.redirect(url);
       // Ensure session cookies are preserved
-      supabaseResponse.cookies.getAll().forEach(c => response.cookies.set(c.name, c.value, c.options));
+      supabaseResponse.cookies.getAll().forEach(({ name, value, ...options }) => response.cookies.set(name, value, options));
       return response;
     }
 
@@ -35,7 +35,7 @@ export async function proxy(request: NextRequest) {
     if (!isAdmin) {
       const response = NextResponse.redirect(new URL('/', request.url));
       // Ensure session cookies are preserved
-      supabaseResponse.cookies.getAll().forEach(c => response.cookies.set(c.name, c.value, c.options));
+      supabaseResponse.cookies.getAll().forEach(({ name, value, ...options }) => response.cookies.set(name, value, options));
       return response;
     }
   }
