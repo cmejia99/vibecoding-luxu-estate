@@ -28,7 +28,7 @@ export async function updateUserRole(userId: string, role: 'user' | 'admin') {
   revalidatePath('/admin/dashboard');
 }
 
-export async function deleteProperty(propertyId: string) {
+export async function togglePropertyStatus(propertyId: string, isActive: boolean) {
   const supabase = await createClient();
 
   // Check admin
@@ -43,11 +43,11 @@ export async function deleteProperty(propertyId: string) {
 
   const { error } = await supabase
     .from('properties')
-    .delete()
+    .update({ is_active: isActive })
     .eq('id', propertyId);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath('/admin/dashboard');
+  revalidatePath('/admin/properties');
   revalidatePath('/');
 }

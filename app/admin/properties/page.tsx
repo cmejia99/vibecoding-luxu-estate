@@ -1,7 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
-import { deleteProperty } from '@/app/admin/actions';
-import DeletePropertyButton from '@/components/admin/DeletePropertyButton';
+import TogglePropertyButton from '@/components/admin/TogglePropertyButton';
 import Link from 'next/link';
 import { getTranslations } from '@/lib/i18n';
 
@@ -20,7 +19,7 @@ export default async function AdminPropertiesPage({
   const from = (currentPage - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  // Fetch properties with count and range
+  // Fetch ALL properties (active + inactive) for admin — no is_active filter
   const { data: properties, error, count } = await supabase
     .from('properties')
     .select('*', { count: 'exact' })
@@ -33,13 +32,14 @@ export default async function AdminPropertiesPage({
 
   const totalPages = Math.ceil((count || 0) / pageSize);
 
-  // Fetch stats (we need total counts regardless of page)
+  // Fetch stats (total counts regardless of page)
   const { data: allStats } = await supabase
     .from('properties')
-    .select('status');
+    .select('status, is_active');
 
   const activeCount = allStats?.filter(p => p.status === 'FOR SALE' || p.status === 'FOR RENT').length || 0;
   const soldCount = allStats?.filter(p => p.status === 'SOLD').length || 0;
+  const inactiveCount = allStats?.filter(p => p.is_active === false).length || 0;
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -74,7 +74,7 @@ export default async function AdminPropertiesPage({
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
         <div className="bg-white dark:bg-[#152e2a] p-5 rounded-xl border border-[#006655]/10 shadow-sm flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.admin.total_listings}</p>
@@ -102,22 +102,39 @@ export default async function AdminPropertiesPage({
             <span className="material-icons">pending</span>
           </div>
         </div>
+        <div className="bg-white dark:bg-[#152e2a] p-5 rounded-xl border border-[#006655]/10 shadow-sm flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Inactivas</p>
+            <p className="text-2xl font-bold text-[#19322F] dark:text-white mt-1">{inactiveCount}</p>
+          </div>
+          <div className="h-10 w-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+            <span className="material-icons">visibility_off</span>
+          </div>
+        </div>
       </div>
 
       {/* Property List Container */}
       <div className="bg-white dark:bg-[#152e2a] rounded-xl shadow-sm border border-gray-200 dark:border-[#006655]/20 overflow-hidden">
         {/* Table Header */}
         <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50/50 dark:bg-[#006655]/5 border-b border-gray-100 dark:border-[#006655]/10 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-          <div className="col-span-6">{t.admin.property_details}</div>
+          <div className="col-span-5">{t.admin.property_details}</div>
           <div className="col-span-2">{t.admin.price}</div>
           <div className="col-span-2">{t.admin.status}</div>
+          <div className="col-span-1">Visibilidad</div>
           <div className="col-span-2 text-right">{t.admin.actions}</div>
         </div>
 
         {properties?.map((property) => (
-          <div key={property.id} className="group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 border-b border-gray-100 dark:border-[#006655]/10 hover:bg-[#EEF6F6] dark:hover:bg-[#006655]/5 transition-colors items-center">
+          <div
+            key={property.id}
+            className={`group grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 border-b border-gray-100 dark:border-[#006655]/10 transition-colors items-center ${
+              property.is_active
+                ? 'hover:bg-[#EEF6F6] dark:hover:bg-[#006655]/5'
+                : 'bg-gray-50/60 dark:bg-gray-900/30 opacity-70'
+            }`}
+          >
             {/* Property Details */}
-            <div className="col-span-12 md:col-span-6 flex gap-4 items-center">
+            <div className="col-span-12 md:col-span-5 flex gap-4 items-center">
               <div className="relative h-20 w-28 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 shadow-sm">
                 <Image 
                   src={property.images?.[0] || 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6'} 
@@ -125,6 +142,11 @@ export default async function AdminPropertiesPage({
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+                {!property.is_active && (
+                  <div className="absolute inset-0 bg-gray-900/40 flex items-center justify-center">
+                    <span className="material-icons text-white text-2xl">visibility_off</span>
+                  </div>
+                )}
               </div>
               <div>
                 <h3 className="text-lg font-bold text-[#19322F] dark:text-white group-hover:text-[#006655] transition-colors cursor-pointer">
@@ -160,16 +182,29 @@ export default async function AdminPropertiesPage({
                 {getStatusLabel(property.status)}
               </span>
             </div>
+            {/* Visibility badge */}
+            <div className="col-span-6 md:col-span-1">
+              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                property.is_active
+                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400'
+                  : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+                  property.is_active ? 'bg-emerald-500' : 'bg-gray-400'
+                }`}></span>
+                {property.is_active ? 'Activa' : 'Inactiva'}
+              </span>
+            </div>
             {/* Actions */}
             <div className="col-span-12 md:col-span-2 flex items-center justify-end gap-2">
               <Link 
                 href={`/admin/properties/edit/${property.id}`}
                 className="p-2 rounded-lg text-gray-400 hover:text-[#006655] hover:bg-[#D9ECC8]/30 transition-all" 
-                title="Edit Property"
+                title="Editar propiedad"
               >
                 <span className="material-icons text-xl">edit</span>
               </Link>
-              <DeletePropertyButton propertyId={property.id} />
+              <TogglePropertyButton propertyId={property.id} isActive={property.is_active} />
             </div>
           </div>
         ))}

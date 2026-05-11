@@ -18,6 +18,7 @@ export interface Property {
   is_exclusive: boolean;
   is_new: boolean;
   is_featured: boolean;
+  is_active: boolean;
   section: 'featured' | 'market';
   amenities: string[];
   description?: string;
@@ -43,6 +44,7 @@ export async function getFeaturedProperties(): Promise<Property[]> {
     .from('properties')
     .select('*')
     .eq('is_featured', true)
+    .eq('is_active', true)
     .order('created_at', { ascending: true });
 
   if (error) {
@@ -65,6 +67,7 @@ export async function getMarketProperties(
     .from('properties')
     .select('*', { count: 'exact' })
     .eq('is_featured', false)
+    .eq('is_active', true)
     .order('created_at', { ascending: true });
 
   if (filters.query) {

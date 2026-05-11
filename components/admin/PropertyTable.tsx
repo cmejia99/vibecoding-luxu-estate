@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteProperty } from '@/app/admin/actions';
+import { togglePropertyStatus } from '@/app/admin/actions';
 import Image from 'next/image';
 
 interface Property {
@@ -14,9 +14,9 @@ interface Property {
 }
 
 export default function PropertyTable({ properties }: { properties: Property[] }) {
-  const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this property?')) {
-      await deleteProperty(id);
+  const handleDeactivate = async (id: string) => {
+    if (confirm('¿Deseas desactivar esta propiedad?')) {
+      await togglePropertyStatus(id, false);
     }
   };
 
@@ -69,10 +69,10 @@ export default function PropertyTable({ properties }: { properties: Property[] }
               <span className="material-icons text-xl">edit</span>
             </button>
             <button 
-              onClick={() => handleDelete(property.id)}
+              onClick={() => handleDeactivate(property.id)}
               className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all"
             >
-              <span className="material-icons text-xl">delete_outline</span>
+              <span className="material-icons text-xl">visibility_off</span>
             </button>
           </div>
         </div>
