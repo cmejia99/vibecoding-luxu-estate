@@ -52,7 +52,7 @@ export async function proxy(request: NextRequest) {
   if (acceptLanguage) {
     const languages = acceptLanguage.split(',').map(l => l.split(';')[0].split('-')[0]);
     const matched = languages.find(l => i18n.locales.includes(l as any));
-    if (matched) detectedLocale = matched;
+    if (matched) detectedLocale = matched as typeof i18n.defaultLocale;
   }
 
   supabaseResponse.cookies.set('NEXT_LOCALE', detectedLocale, {
