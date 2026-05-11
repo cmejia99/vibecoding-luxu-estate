@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import { i18n } from './lib/i18n-config';
 import { updateSession } from '@/utils/supabase/middleware';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const locale = request.cookies.get('NEXT_LOCALE')?.value;
 
   // Update Supabase session
@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Fetch profile with error handling
-    const { data: profile, error } = await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
