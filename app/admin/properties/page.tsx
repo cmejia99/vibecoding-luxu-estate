@@ -63,10 +63,13 @@ export default async function AdminPropertiesPage({
             <span className="material-icons text-base">filter_list</span> {t.admin.filter}
           </button>
           
-          <button className="inline-flex items-center justify-center px-5 py-2.5 border border-[#006655] text-sm font-semibold rounded-lg text-[#006655] bg-transparent hover:bg-[#006655]/5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006655] transition-all whitespace-nowrap shadow-sm">
+          <Link 
+            href="/admin/properties/add"
+            className="inline-flex items-center justify-center px-5 py-2.5 border border-[#006655] text-sm font-semibold rounded-lg text-[#006655] bg-transparent hover:bg-[#006655]/5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006655] transition-all whitespace-nowrap shadow-sm"
+          >
             <span className="material-icons text-lg mr-2 font-bold">add</span>
             {t.admin.add_property}
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -159,9 +162,13 @@ export default async function AdminPropertiesPage({
             </div>
             {/* Actions */}
             <div className="col-span-12 md:col-span-2 flex items-center justify-end gap-2">
-              <button className="p-2 rounded-lg text-gray-400 hover:text-[#006655] hover:bg-[#D9ECC8]/30 transition-all" title="Edit Property">
+              <Link 
+                href={`/admin/properties/edit/${property.id}`}
+                className="p-2 rounded-lg text-gray-400 hover:text-[#006655] hover:bg-[#D9ECC8]/30 transition-all" 
+                title="Edit Property"
+              >
                 <span className="material-icons text-xl">edit</span>
-              </button>
+              </Link>
               <DeletePropertyButton propertyId={property.id} />
             </div>
           </div>

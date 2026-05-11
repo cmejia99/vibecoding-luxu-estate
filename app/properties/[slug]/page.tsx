@@ -169,12 +169,18 @@ export default async function PropertyDetails({ params }: { params: Promise<{ sl
             <div className="bg-white p-8 rounded-xl shadow-sm border border-mosque/5">
               <h2 className="text-lg font-semibold mb-4 text-nordic-dark">{tr('details.about_title')}</h2>
               <div className="prose prose-slate max-w-none text-nordic-dark/70 leading-relaxed">
-                <p className="mb-4">
-                  {tr('details.about_desc', { type: tr(`search.types.${property.type}`).toLowerCase(), location: property.location })}
-                </p>
-                <p>
-                  {tr('details.about_desc_2')}
-                </p>
+                {property.description ? (
+                  <div className="whitespace-pre-line">{property.description}</div>
+                ) : (
+                  <>
+                    <p className="mb-4">
+                      {tr('details.about_desc', { type: tr(`search.types.${property.type}`).toLowerCase(), location: property.location })}
+                    </p>
+                    <p>
+                      {tr('details.about_desc_2')}
+                    </p>
+                  </>
+                )}
               </div>
               <button className="mt-4 text-mosque font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all cursor-pointer">
                 {tr('details.read_more')}
@@ -182,27 +188,19 @@ export default async function PropertyDetails({ params }: { params: Promise<{ sl
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-mosque/5">
-              <h2 className="text-lg font-semibold mb-6 text-nordic-dark">{tr('details.amenities')}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
-                <div className="flex items-center gap-3 text-nordic-dark/70">
-                  <span className="material-icons text-mosque/60 text-sm">check_circle</span>
-                  <span>{tr('details.smart_home')}</span>
-                </div>
-                <div className="flex items-center gap-3 text-nordic-dark/70">
-                  <span className="material-icons text-mosque/60 text-sm">check_circle</span>
-                  <span>{tr('details.heating_cooling')}</span>
-                </div>
-                <div className="flex items-center gap-3 text-nordic-dark/70">
-                  <span className="material-icons text-mosque/60 text-sm">check_circle</span>
-                  <span>{tr('details.parking')}</span>
-                </div>
-                <div className="flex items-center gap-3 text-nordic-dark/70">
-                  <span className="material-icons text-mosque/60 text-sm">check_circle</span>
-                  <span>{tr('details.security')}</span>
+            {property.amenities && property.amenities.length > 0 && (
+              <div className="bg-white p-8 rounded-xl shadow-sm border border-mosque/5">
+                <h2 className="text-lg font-semibold mb-6 text-nordic-dark">{tr('details.amenities')}</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                  {property.amenities.map((amenity, index) => (
+                    <div key={index} className="flex items-center gap-3 text-nordic-dark/70">
+                      <span className="material-icons text-mosque/60 text-sm">check_circle</span>
+                      <span>{amenity}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
 
             {property.status === 'FOR SALE' && (
               <div className="bg-mosque/5 p-6 rounded-xl border border-mosque/10 flex flex-col sm:flex-row items-center justify-between gap-6">

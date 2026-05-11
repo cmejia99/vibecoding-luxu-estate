@@ -13,13 +13,16 @@ export interface Property {
   longitude: number;
   images: string[];
   slug: string;
-  status: 'FOR SALE' | 'FOR RENT';
-  type: 'House' | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio';
+  status: 'FOR SALE' | 'FOR RENT' | 'SOLD';
+  type: 'House' | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio' | 'Commercial';
   is_exclusive: boolean;
   is_new: boolean;
   is_featured: boolean;
   section: 'featured' | 'market';
   amenities: string[];
+  description?: string;
+  year_built?: number;
+  parking?: number;
 }
 
 export interface PropertyFilters {
