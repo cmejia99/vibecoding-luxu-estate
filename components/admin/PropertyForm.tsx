@@ -6,6 +6,19 @@ import { createClient } from '@/utils/supabase/client';
 import { uploadPropertyImage, deletePropertyImage } from '@/utils/supabase/storage';
 import { Property } from '@/lib/properties';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const MapPicker = dynamic(() => import('./MapPicker'), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[300px] rounded-lg bg-gray-100 dark:bg-[#0f2320] animate-pulse flex items-center justify-center border border-gray-200 dark:border-[#006655]/30">
+      <div className="flex flex-col items-center gap-2">
+        <span className="material-icons text-gray-300 dark:text-gray-700 text-4xl">map</span>
+        <span className="text-xs text-gray-400 font-sf-pro">Loading map...</span>
+      </div>
+    </div>
+  )
+});
 
 interface PropertyFormProps {
   initialData?: Property | null;
@@ -358,6 +371,21 @@ export default function PropertyForm({ initialData, mode }: PropertyFormProps) {
                   step="any"
                 />
               </div>
+            </div>
+            
+            <div className="pt-2">
+              <label className="block text-sm font-medium text-[#19322F] dark:text-gray-300 mb-2 font-sf-pro">Map Preview</label>
+              <MapPicker 
+                latitude={formData.latitude} 
+                longitude={formData.longitude} 
+                onChange={(lat, lng) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    latitude: parseFloat(lat.toFixed(6)),
+                    longitude: parseFloat(lng.toFixed(6))
+                  }));
+                }} 
+              />
             </div>
           </div>
         </div>
